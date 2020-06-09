@@ -57,7 +57,34 @@ I have Liquibase 3.9.0 on my system path. Thus, from the Liquibase folder I exec
 		`
 		You can certainly give any id you want, but I chose this because the 'film' table changeset is, in my changelog, "<epoch time>-34"
 		
-	
+		Our next fix will be the "YEAR (10)" datatype on the release_year column in the film table. Simply change "YEAR (10)" to "YEAR".
+		
+		Our next step will be including functions.
+		
+		<changeSet author="r2" id="51.1">
+			<sql>CREATE FUNCTION _group_concat(text, text) RETURNS text
+						AS $_$
+					SELECT CASE
+					  WHEN $2 IS NULL THEN $1
+					  WHEN $1 IS NULL THEN $2
+					  ELSE $1 || ', ' || $2
+					END
+					$_$
+						LANGUAGE sql IMMUTABLE;
+			</sql>
+			<sql>ALTER FUNCTION public._group_concat(text, text) OWNER TO postgres;</sql>
+		</changeSet>
+		<changeSet author="r2" id="51.2">
+			<sql>CREATE AGGREGATE group_concat(text) (
+						SFUNC = _group_concat,
+						STYPE = text
+					);
+			</sql>
+			<sql>ALTER AGGREGATE public.group_concat(text) OWNER TO postgres;</sql>
+		</changeSet>
+
+		Of course, this file is included in the repo.
+
 5) Tie it all together with Artifactory and Jenkins
 
 	a) I'm using Artifactory Cloud because I'm lazy and don't want to set this up myself.

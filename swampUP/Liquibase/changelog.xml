@@ -328,6 +328,17 @@
     <changeSet author="r2 (generated)" id="1591631524099-33">
         <addForeignKeyConstraint baseColumnNames="inventory_id" baseTableName="rental" constraintName="rental_inventory_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="CASCADE" referencedColumnNames="inventory_id" referencedTableName="inventory" validate="true"/>
     </changeSet>
+	
+    <changeSet author="r2" id="34.1">
+        <sql>CREATE DOMAIN year AS integer CONSTRAINT year_check CHECK (((VALUE &gt;= 1901) AND (VALUE &lt;= 2155)))</sql>
+		<sql>ALTER DOMAIN public.year OWNER TO postgres</sql>
+	</changeSet>
+
+    <changeSet author="r2" id="34.2">
+        <sql>CREATE TYPE mpaa_rating AS ENUM ('G', 'PG', 'PG-13', 'R', 'NC-17')</sql>
+		<sql>ALTER TYPE public.mpaa_rating OWNER TO postgres</sql>
+	</changeSet>
+	
     <changeSet author="r2 (generated)" id="1591631524099-34">
         <createTable tableName="film">
             <column autoIncrement="true" name="film_id" type="INTEGER">
@@ -337,7 +348,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="TEXT"/>
-            <column name="release_year" type="YEAR(10)"/>
+            <column name="release_year" type="YEAR"/>
             <column name="language_id" type="SMALLINT">
                 <constraints nullable="false"/>
             </column>
@@ -428,6 +439,27 @@
     <changeSet author="r2 (generated)" id="1591631524099-50">
         <addForeignKeyConstraint baseColumnNames="customer_id" baseTableName="rental" constraintName="rental_customer_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="CASCADE" referencedColumnNames="customer_id" referencedTableName="customer" validate="true"/>
     </changeSet>
+	<changeSet author="r2" id="51.1">
+		<sql>CREATE FUNCTION _group_concat(text, text) RETURNS text
+					AS $_$
+				SELECT CASE
+				  WHEN $2 IS NULL THEN $1
+				  WHEN $1 IS NULL THEN $2
+				  ELSE $1 || ', ' || $2
+				END
+				$_$
+					LANGUAGE sql IMMUTABLE;
+		</sql>
+		<sql>ALTER FUNCTION public._group_concat(text, text) OWNER TO postgres;</sql>
+	</changeSet>
+	<changeSet author="r2" id="51.2">
+		<sql>CREATE AGGREGATE group_concat(text) (
+					SFUNC = _group_concat,
+					STYPE = text
+				);
+		</sql>
+		<sql>ALTER AGGREGATE public.group_concat(text) OWNER TO postgres;</sql>
+	</changeSet>
     <changeSet author="r2 (generated)" id="1591631524099-51">
         <createView fullDefinition="false" viewName="film_list"> SELECT film.film_id AS fid,
     film.title,
