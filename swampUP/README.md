@@ -121,6 +121,12 @@ I have Liquibase 3.9.0 on my system path. Thus, from the Liquibase folder I exec
 	
 	liquibase update
 	
+	# configure jenkins freeform job
+	
+	git: https://github.com/liquibase/presentations.git
+	shell: 
+		chmod +x ./swampUP/Liquibase/liquibase-3.9.0/liquibase
+		./swampUP/Liquibase/liquibase-3.9.0/liquibase --changeLogFile=./swampUP/Liquibase/changelog.xml --username=postgres --password=secret --url=jdbc:postgresql://172.17.0.3:5432/postgres update
 	
 
 
