@@ -66,10 +66,35 @@ I have Liquibase 3.9.0 on my system path. Thus, from the Liquibase folder I exec
 	
 	#TODO upload changelog
 	
+	curl -uadmin:APAGRiLWyZWEGUypoQJ6jHFMJ3c -T changelog.xml "https://liquibase.jfrog.io/artifactory/example-repo-local/changelog.xml"
+	
 	
 	b) `docker run -p 8080:8080 jenkins/jenkins:lts`
 	
+	# install liquibase
+	
+	docker exec -it -u root <container> bash
+	apt update
+	apt install vim
+	cd /tmp
+	curl -L https://github.com/liquibase/liquibase/releases/download/v3.9.0/liquibase-3.9.0.tar.gz --output liquibase-3.9.0.tar.gz
+	mkdir liquibase
+	cd liquibase
+	tar xvzf ../liquibase-3.9.0.tgz
+	curl -L https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.9/postgresql-42.2.9.jar --output /tmp/liquibase/lib/postgresql-42.2.9.jar
+	
+	# get pg ip address
+	
+	docker inspect <postgres container>
+	
+	
 	# pull down artifact, run it.
+	
+	curl -uadmin:APAGRiLWyZWEGUypoQJ6jHFMJ3c -O "https://liquibase.jfrog.io/artifactory/example-repo-local/changelog.xml"
+	
+	liquibase update
+	
+	
 
 
 
