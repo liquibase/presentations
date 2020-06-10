@@ -14,7 +14,7 @@ Anyone can do this. I’ll demonstrate how you can use an open source tool calle
 
 You can use Sakila from our friends at jOOQ; they have it for DB2, MySQL, Oracle, Posgres, SQL Server, and SQL Lite. You can find the one we used in the Sakila directory in this repository.
 
-`docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres`
+`docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres'
 
 Connect with DBeaver or your favorite SQL execution tool. Then execute https://github.com/jOOQ/jOOQ/blob/master/jOOQ-examples/Sakila/postgres-sakila-db/postgres-sakila-schema.sql. You can verify that the objects were created by looking in DBeaver.
 
