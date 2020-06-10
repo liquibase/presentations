@@ -37,7 +37,7 @@ I have Liquibase 3.9.0 on my system path because I'm awesome. Thus, from the Liq
 	
 	b. However, we really need to test our changelog.xml before we do that. After all, there could be issues with the changelog.xml and it would be bad form to check in code that we don't know if it works. (Spoiler: there's a problem)
 	
-		i) Start a new PosgreSQL database. Or you can shutdown the running one and restart it. That's what I'm going to do.
+		i. Start a new PosgreSQL database. Or you can shutdown the running one and restart it. That's what I'm going to do.
 
 		`docker stop <container name>`
 		`docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres`
