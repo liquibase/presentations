@@ -1,17 +1,17 @@
 
 setup:
 
-	docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
-	#DBeaver: run Sakila SQL
-	liquibase generatechangelog
-	liquibase changelogsync
+docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
+#DBeaver: run Sakila SQL
+liquibase generatechangelog
+liquibase changelogsync
 
-	docker stop <container name>
-	docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
+docker stop <container name>
+docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
 
-	liquibase update
-	
-	Fix Errors:
+liquibase update
+
+Fix Errors:
 
 <changeSet author="r2" id="34.1">
 	<sql>CREATE DOMAIN year AS integer CONSTRAINT year_check CHECK (((VALUE &gt;= 1901) AND (VALUE &lt;= 2155)))</sql>
@@ -49,11 +49,11 @@ change "YEAR (10)" to "YEAR".
 
 Deploy time:
 
-	push to artifactory
+push to artifactory
 
-	curl -uadmin:APAGRiLWyZWEGUypoQJ6jHFMJ3c -T changelog.xml "https://liquibase.jfrog.io/artifactory/example-repo-local/changelog.xml"
+curl -uadmin:APAGRiLWyZWEGUypoQJ6jHFMJ3c -T changelog.xml "https://liquibase.jfrog.io/artifactory/example-repo-local/changelog.xml"
 	
-	start jenkins
+start jenkins
 	
 docker run -p 8080:8080 jenkins/jenkins:lts
 	
@@ -65,17 +65,17 @@ cd liquibase
 tar xvzf ../liquibase-3.9.0.tgz
 curl -L https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.9/postgresql-42.2.9.jar --output /tmp/liquibase/lib/postgresql-42.2.9.jar
 	
-	configure Jenkins
-	
-	docker inspect <postgres container>
-	
-	free form Jenkins job.
+configure Jenkins
+
+docker inspect <postgres container>
+
+free form Jenkins job.
 	
 Git Repos: https://github.com/liquibase/presentations.git
 Shell: 
 chmod +x ./swampUP/Liquibase/liquibase-3.9.0/liquibase
 curl -uadmin:APAGRiLWyZWEGUypoQJ6jHFMJ3c -O "https://liquibase.jfrog.io/artifactory/example-repo-local/changelog.xml"
-./swampUP/Liquibase/liquibase-3.9.0/liquibase --changeLogFile=changelog.xml --username=postgres --password=secret --url=jdbc:postgresql://172.17.0.3:5432/postgres update
+./swampUP/Liquibase/liquibase-3.9.0/liquibase --changeLogFile=changelog.xml --username=postgres --password=secret --url=jdbc:postgresql://172.17.0.2:5432/postgres update
 
 
 
