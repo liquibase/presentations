@@ -1,82 +1,42 @@
 
+
 setup:
 
-docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
-#DBeaver: run Sakila SQL
-liquibase generatechangelog
-liquibase changelogsync
+database: 
 
-docker stop <container name>
-docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
+	docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
+	
+jenkins:
 
-liquibase update
-
-Fix Errors:
-
-<changeSet author="r2" id="34.1">
-	<sql>CREATE DOMAIN year AS integer CONSTRAINT year_check CHECK (((VALUE &gt;= 1901) AND (VALUE &lt;= 2155)))</sql>
-	<sql>ALTER DOMAIN public.year OWNER TO postgres</sql>
-</changeSet>
-
-<changeSet author="r2" id="34.2">
-	<sql>CREATE TYPE mpaa_rating AS ENUM ('G', 'PG', 'PG-13', 'R', 'NC-17')</sql>
-	<sql>ALTER TYPE public.mpaa_rating OWNER TO postgres</sql>
-</changeSet>
-
-change "YEAR (10)" to "YEAR".
-		
-<changeSet author="r2" id="51.1">
-	<sql>CREATE FUNCTION _group_concat(text, text) RETURNS text
-				AS $_$
-			SELECT CASE
-			  WHEN $2 IS NULL THEN $1
-			  WHEN $1 IS NULL THEN $2
-			  ELSE $1 || ', ' || $2
-			END
-			$_$
-				LANGUAGE sql IMMUTABLE;
-	</sql>
-	<sql>ALTER FUNCTION public._group_concat(text, text) OWNER TO postgres;</sql>
-</changeSet>
-<changeSet author="r2" id="51.2">
-	<sql>CREATE AGGREGATE group_concat(text) (
-				SFUNC = _group_concat,
-				STYPE = text
-			);
-	</sql>
-	<sql>ALTER AGGREGATE public.group_concat(text) OWNER TO postgres;</sql>
-</changeSet>
-
-Deploy time:
-
-start jenkins: 
-
-	git clone git@github.com:jenkinsci/liquibase-runner-plugin.git
+	git clone https://github.com/jenkinsci/liquibase-runner-plugin.git
 	cd liquibase-runner-plugin
-	git checkout republish-fixes
 	mvn hpi:run
+		
+liquibase:
+
+	download 3.10.2 from github.com/liquibase/liquibase/releases
+	extract to local system
+
+configure:
+
+	http://localhost:8080/jenkins
 	
-docker run -p 8080:8080 jenkins/jenkins:lts
+	Manage Jenkins --> Global Tool Configuration --> Liquibase Installations ...
+		Name: Liquibase 3.10.2
+		Liquibase Installation Path: Path to Liquibase 3.10.2
+		Save	
+		
+	Jenkins --> Project --> Configure
 	
-docker exec -it -u root <container> bash
-cd /tmp
-curl -L https://github.com/liquibase/liquibase/releases/download/v3.9.0/liquibase-3.9.0.tar.gz --output liquibase-3.9.0.tar.gz
-mkdir liquibase
-cd liquibase
-tar xvzf ../liquibase-3.9.0.tgz
-curl -L https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.9/postgresql-42.2.9.jar --output /tmp/liquibase/lib/postgresql-42.2.9.jar
-	
-configure Jenkins
-
-docker inspect <postgres container>
-
-free form Jenkins job.
-	
-Git Repos: https://github.com/liquibase/presentations.git
-Shell: 
-chmod +x ./swampUP/Liquibase/liquibase-3.9.0/liquibase
-curl -uadmin:APAGRiLWyZWEGUypoQJ6jHFMJ3c -O "https://liquibase.jfrog.io/artifactory/example-repo-local/changelog.xml"
-./swampUP/Liquibase/liquibase-3.9.0/liquibase --changeLogFile=changelog.xml --username=postgres --password=secret --url=jdbc:postgresql://172.17.0.2:5432/postgres update
-
-
-
+		Source Code Management --> Git -> https://github.com/liquibase/presentations.git
+			No credentials
+			
+		
+		Add Build Step --> Liquibase: Update Database
+			Change Log: ${WORKSPACE}/DevOpsWorld/liquibase/changelog.xml
+			Database URL: jdbc:postgresql://localhost:5432/postgres
+			Credentials: postgres/secret
+			Liquibase Installation: 3.10.2
+			
+			
+build it!
