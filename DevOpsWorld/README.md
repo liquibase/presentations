@@ -26,8 +26,11 @@ This session will help you learn key skills that will keep your organization com
 4. Now the fun part: Let's configurate Jenkins!
 
 	Go to Manage Jenkins --> Global Tool Configuration --> Liquibase Installations and create a new Global Liquibase installation:
+		
 		Name: Liquibase 3.10.2
+		
 		Liquibase Installation Path: Path to Liquibase 3.10.2
+		
 		Select Save	
 		
 	Go to Jenkins --> <Your Project> --> Configure and make sure you have the following configurated.
@@ -35,9 +38,13 @@ This session will help you learn key skills that will keep your organization com
 	Source Code Management --> Git -> https://github.com/liquibase/presentations.git (no need for credentials)
 		
 	Add Build Step --> Liquibase: Update Database
+		
 		Change Log: ${WORKSPACE}/DevOpsWorld/liquibase/changelog.xml
+		
 		Database URL: jdbc:postgresql://localhost:5432/postgres (use `docker inspect <container>` to verify the IP of your container.)
+		
 		Credentials: postgres/secret
+		
 		Liquibase Installation: 3.10.2
 
 Now build it! Don't forget to celebrate your freedome from the tyranny of manual database schema change!!!
