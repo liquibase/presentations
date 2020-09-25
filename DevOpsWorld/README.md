@@ -13,11 +13,9 @@ This session will help you learn key skills that will keep your organization com
 
 	`docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres`
 
-2. Now, we need to get Jenkins up and running with the Liquibase Runner Plugin. (This will be republished soon after some final reviews, but for now...)
+2. Now, we need to install the Liquibase Runner plugin in Jenkins.
 
-	`git clone https://github.com/jenkinsci/liquibase-runner-plugin.git`
-	`cd liquibase-runner-plugin`
-	`mvn hpi:run`
+	In Jenkins, navigate to Manage Jenkins --> Manage Plugins and select the "Available" tab. After the plugin list has loaded, search for "Liquibase". Select the checkbox next to "Liquibase Runner" and either choose "Install without restart" or "Download now and install after restart". 
 	
 3. Next, we need to get Liquibase installed on our local system. Simply visit https://github.com/liquibase/liquibase/releases and get the latest release. We'll use 3.10.2 for this demo.
 
