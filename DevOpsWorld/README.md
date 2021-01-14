@@ -1,6 +1,8 @@
 # DevOps World 2020
 # Your CI/CD Fails at the Database and What You Can Do About It
 
+Recorded Presentation: https://www.cloudbees.com/resources/ci-cd-fail-automate-database
+
 Speed is everything right now. At the same time, a global pandemic has led companies to reduce headcount. Many organizations have already adopted automation in their software delivery process to help developers build and continuously deliver app code. But in most cases, the database has been left behind. What’s at stake? Everything. Databases have never been more important because data has never been more important. Without automation, CI/CD fails at the database. This session will teach you how you can step up to: 
 	- Automate database schema chang
 	- Automatically enforce standards 
