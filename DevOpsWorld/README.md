@@ -47,4 +47,4 @@ This session will help you learn key skills that will keep your organization com
 		
 		Liquibase Installation: 3.10.2
 
-Now build it! Don't forget to celebrate your freedome from the tyranny of manual database schema change!!!
+Now build it! Don't forget to celebrate your freedom from the tyranny of manual database schema change!!!
