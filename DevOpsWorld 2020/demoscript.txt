@@ -16,6 +16,7 @@ liquibase:
 
 	download 3.10.2 from github.com/liquibase/liquibase/releases
 	extract to local system
+	place postgres JDBC jar in liquibase/lib
 
 configure:
 
