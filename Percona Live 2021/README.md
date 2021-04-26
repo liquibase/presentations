@@ -17,7 +17,7 @@ In this talk, Kristyl Gomes and Robert Reeves will demonstrate why implementing 
 
 3. Start with a Docker PostgreSQL database. 
 
-	`docker run --name mypostgres -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres`
+	`docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres`
 
 4. Using your favorite SQL execution tool, connect to the Docker container and execute `init.sql`. This will create some simple tables and data. This will help us show how to use Liquibase against an existing database.
 
@@ -36,11 +36,9 @@ changeLogFile= changelog.xml
 
 6. Shutdown the Docker database and recreate it. 
 
-	`docker stop mypostgres`
+	`docker stop <container name>` (Use `docker ps` to find the container name.)
 
-	`docker rm mypostgres`
-
-	`docker run --name mypostgres -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres`
+	`docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres`
 
 7. Run `liquibase update`. Connect using your favorite SQL execution tool and examine the tables created.
 
